@@ -8,17 +8,24 @@ def handle_keys(player):
         return True  #exit game
 
     #movement keys
-    if libtcod.console_is_key_pressed(libtcod.KEY_UP):
+    if libtcod.console_is_key_pressed(libtcod.KEY_UP) or chr(key.c) == "k":
         player.move_object(0, -1)
- 
-    elif libtcod.console_is_key_pressed(libtcod.KEY_DOWN):
+    elif libtcod.console_is_key_pressed(libtcod.KEY_DOWN) or chr(key.c) == "j":
         player.move_object(0, 1)
- 
-    elif libtcod.console_is_key_pressed(libtcod.KEY_LEFT):
+    elif libtcod.console_is_key_pressed(libtcod.KEY_LEFT) or chr(key.c) == "h":
         player.move_object(-1, 0)
- 
-    elif libtcod.console_is_key_pressed(libtcod.KEY_RIGHT):
+    elif libtcod.console_is_key_pressed(libtcod.KEY_RIGHT) or chr(key.c) == "l":
         player.move_object(1, 0)
+    elif chr(key.c) == "y":
+    	player.move_object(-1, -1)
+    elif chr(key.c) == "u":
+    	player.move_object(1, -1)
+    elif chr(key.c) == "b":
+    	player.move_object(-1, 1)
+    elif chr(key.c) == "n":
+    	player.move_object(1, 1)
+
+
 
 SCREEN_WIDTH = 40
 SCREEN_HEIGHT = 40
