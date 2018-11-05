@@ -1,5 +1,5 @@
-from drawable import DrawableObject
-from movable import MovableObject
+from .drawable import DrawableObject
+from .movable import MovableObject
 
 class Player(DrawableObject, MovableObject):
 
