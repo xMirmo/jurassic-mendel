@@ -1,7 +1,7 @@
 import libtcodpy as libtcod
 from collections import deque
 from objects.objects import Player
-from objects.map import Map
+from objects.map import Map, DrawableMap
 
 #should this function always return something? Probably so since a roguelike proceeds only when the player inputs something
 def handle_keys(currentMap, player):
@@ -66,11 +66,13 @@ currentMap.make_walls()
 currentMap.get_tile(10, 10).block = True
 currentMap.get_tile(10, 11).block = True
 
+currentDrawMap = DrawableMap(currentMap, player)
+
 movement_queue = deque()
 
 while not libtcod.console_is_window_closed():
     libtcod.console_set_default_foreground(0, libtcod.white)
-    currentMap.draw()
+    currentDrawMap.draw()
     player.draw()
     libtcod.console_flush()
 

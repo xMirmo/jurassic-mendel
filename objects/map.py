@@ -44,8 +44,18 @@ class Map():
                         for k in range(y-1, y+2, 2):
                             if not self.is_free_at(j, k):
                                 self.mapBuffer[j][k] = Tiles(j, k, "#", True)
+        
+
+class DrawableMap():
+    def __init__(self, map, player):
+        self.currentMap = map
+        self.player = player
     
+    def get_map(self):
+        return self.currentMap
+
     def draw(self):
-        for y in range(self.height):
-            for x in range(self.lenght):
-                self.get_tile(x,y).draw()
+        for y in range(self.currentMap.height):
+           for x in range(self.currentMap.lenght):
+               self.currentMap.get_tile(x,y).draw()
+
