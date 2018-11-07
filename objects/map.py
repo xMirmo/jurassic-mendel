@@ -3,9 +3,10 @@ import libtcodpy as libtcod
 
 
 class Tiles(DrawableObject):
-    def __init__(self, x, y, glyph = "", block = False):
+    def __init__(self, x, y, glyph = "", block = False, trasparent = True):
         DrawableObject.__init__(self, glyph, x, y)
         self.block = block
+        self.trasparent = trasparent
 
 class Map():
     def __init__(self, mapX, mapY):
@@ -50,6 +51,11 @@ class DrawableMap():
     def __init__(self, map, player):
         self.currentMap = map
         self.player = player
+        self.fov_map = libtcod.map_new(map.mapX, map.mapY)
+
+        for y in range(map.mapY):
+            for x in range(map.mapX):
+                libtcod.map_set_properties(self.fov_map, x, y, self.currentMap.get_tile(x,y).trasparent, not self.currentMap.get_tile(x,y).block)
     
     def get_map(self):
         return self.currentMap
