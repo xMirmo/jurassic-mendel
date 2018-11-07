@@ -51,7 +51,7 @@ libtcod.console_init_root(SCREEN_WIDTH, SCREEN_HEIGHT, 'jurassic-mendel', False)
 
 player = Player('@', 5, 5)
 
-currentMap = Map(40, 40)
+currentMap = Map(SCREEN_WIDTH, SCREEN_HEIGHT)
 
 currentMap.make_room(1, 1, 11, 11)
 currentMap.make_room(20, 1, 13, 9)
@@ -67,14 +67,15 @@ currentMap.make_walls()
 currentDrawMap = DrawableMap(currentMap, player)
 
 movement_queue = deque()
+libtcod.console_set_default_foreground(0, libtcod.white)
+
 
 while not libtcod.console_is_window_closed():
-    libtcod.console_set_default_foreground(0, libtcod.white)
+    libtcod.console_clear(0)
     currentDrawMap.draw()
     player.draw()
     libtcod.console_flush()
 
-    player.clear()
     command = handle_keys(currentMap, player)
 
     if command is "exit":
