@@ -63,8 +63,6 @@ currentMap.make_corridor(25, 22, 33, 34)
 currentMap.make_corridor(7, 33, 23, 24)
 currentMap.make_walls()
 
-currentMap.get_tile(10, 10).block = True
-currentMap.get_tile(10, 11).block = True
 
 currentDrawMap = DrawableMap(currentMap, player)
 

@@ -44,24 +44,26 @@ class Map():
                     for j in range(x-1, x+2, 2):
                         for k in range(y-1, y+2, 2):
                             if not self.is_free_at(j, k):
-                                self.mapBuffer[j][k] = Tiles(j, k, "#", True)
+                                self.mapBuffer[j][k] = Tiles(j, k, "#", True, False)
         
 
 class DrawableMap():
     def __init__(self, map, player):
         self.currentMap = map
         self.player = player
-        self.fov_map = libtcod.map_new(map.mapX, map.mapY)
+        self.fov_map = libtcod.map_new(map.lenght, map.height)
 
-        for y in range(map.mapY):
-            for x in range(map.mapX):
+        for y in range(self.currentMap.height):
+            for x in range(self.currentMap.lenght):
                 libtcod.map_set_properties(self.fov_map, x, y, self.currentMap.get_tile(x,y).trasparent, not self.currentMap.get_tile(x,y).block)
     
     def get_map(self):
         return self.currentMap
 
     def draw(self):
+        libtcod.map_compute_fov(self.fov_map, self.player.x, self.player.y, 10, True, 0)
         for y in range(self.currentMap.height):
            for x in range(self.currentMap.lenght):
-               self.currentMap.get_tile(x,y).draw()
+                if libtcod.map_is_in_fov(self.fov_map, x, y):
+                    self.currentMap.get_tile(x,y).draw()
 
