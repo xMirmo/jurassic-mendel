@@ -68,8 +68,6 @@ currentMap.get_tile(10, 11).block = True
 
 movement_queue = deque()
 
-movement_queue = deque()
-
 while not libtcod.console_is_window_closed():
     libtcod.console_set_default_foreground(0, libtcod.white)
     currentMap.draw()
