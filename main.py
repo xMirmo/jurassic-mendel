@@ -1,7 +1,8 @@
+# noinspection PyDeprecation
 import libtcodpy as libtcod
 from collections import deque
 from objects.objects import Player
-from objects.map import Map, DrawableMap
+from objects.map import Map, MapBuilder, DrawableMap
 
 #should this function always return something? Probably so since a roguelike proceeds only when the player inputs something
 def handle_keys(currentMap, player):
@@ -38,7 +39,7 @@ def move_step():
     player_vector = movement_queue.popleft()
 
     player_new_position = (player.x + player_vector[0], player.y + player_vector[1])
-    if currentMap.is_free_at(player_new_position[0], player_new_position[1]):
+    if current_map.is_free_at(player_new_position[0], player_new_position[1]):
         player.move_object(player_vector)
 
 
@@ -51,20 +52,12 @@ libtcod.console_init_root(SCREEN_WIDTH, SCREEN_HEIGHT, 'jurassic-mendel', False)
 
 player = Player('@', 5, 5)
 
-currentMap = Map(SCREEN_WIDTH, SCREEN_HEIGHT)
 
-currentMap.make_room(1, 1, 11, 11)
-currentMap.make_room(20, 1, 13, 9)
-currentMap.make_room(20, 20, 5, 5)
-currentMap.make_room(3, 33, 4, 2)
-currentMap.make_room(28, 34, 10, 4)
-currentMap.make_corridor(10, 5, 25, 21)
-currentMap.make_corridor(25, 22, 33, 34)
-currentMap.make_corridor(7, 33, 23, 24)
-currentMap.make_walls()
+map_builder = MapBuilder()
+current_map = map_builder.make_map(SCREEN_WIDTH, SCREEN_HEIGHT)
 
 
-currentDrawMap = DrawableMap(currentMap, player)
+currentDrawMap = DrawableMap(current_map, player)
 
 movement_queue = deque()
 libtcod.console_set_default_foreground(0, libtcod.white)
@@ -76,7 +69,7 @@ while not libtcod.console_is_window_closed():
     player.draw()
     libtcod.console_flush()
 
-    command = handle_keys(currentMap, player)
+    command = handle_keys(current_map, player)
 
     if command is "exit":
         break
