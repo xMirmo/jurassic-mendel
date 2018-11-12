@@ -1,4 +1,3 @@
-# noinspection PyDeprecation
 import libtcodpy as libtcod
 from collections import deque
 from objects.objects import Player
@@ -12,7 +11,7 @@ class Game():
         SCREEN_WIDTH = 40
         SCREEN_HEIGHT = 40
 
-        libtcod.console_set_custom_font('arial10x10.png', libtcod.FONT_TYPE_GREYSCALE | libtcod.FONT_LAYOUT_TCOD)
+        libtcod.console_set_custom_font('resources/arial10x10.png', libtcod.FONT_TYPE_GREYSCALE | libtcod.FONT_LAYOUT_TCOD)
         libtcod.console_init_root(SCREEN_WIDTH, SCREEN_HEIGHT, 'jurassic-mendel', False)
         libtcod.console_set_default_foreground(0, libtcod.white)
 
@@ -66,8 +65,3 @@ class Game():
                     self.game_state = PauseState()
                 elif(eventName == "go_active"):
                     self.game_state = ActiveState()
-
-
-
-
-Game().run_game()

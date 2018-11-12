@@ -1,0 +1,7 @@
+#!/usr/bin/python3
+
+# noinspection PyDeprecation
+from states.game import Game
+
+if __name__ == "__main__":
+    Game().run_game()
