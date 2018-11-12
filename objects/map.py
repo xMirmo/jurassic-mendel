@@ -249,6 +249,9 @@ class DrawableMap():
 
     def get_map(self):
         return self.currentMap
+    
+    def is_in_fov(self, x, y):
+        return libtcod.map_is_in_fov(self.fov_map, x, y)
 
     def draw(self):
         for tile in self.currentMap.get_map_list():

@@ -21,7 +21,8 @@ class ActiveState(GameState):
         game.currentDrawMap.draw()
         game.player.draw()
         for enemy in game.current_map.entity_list:
-            enemy.draw()
+            if game.currentDrawMap.is_in_fov(enemy.x, enemy.y):
+                enemy.draw()
 
     def handle_input(self, game, key):
         key_map = {
