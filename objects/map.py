@@ -1,5 +1,6 @@
 from .objects import DrawableObject
 from .objects import Monster
+from .objects import AIObject
 import libtcodpy as libtcod
 from random import shuffle, randint
 
@@ -142,7 +143,7 @@ class MapBuilder:
                 while self.map.is_something_at(x, y):
                     x = randint(room.dimensions.x1, room.dimensions.x2)
                     y = randint(room.dimensions.y1, room.dimensions.y2)
-                self.map.entity_list.append(Monster("p", x, y, "Pipsqueak", "Just a friendly small thing"))
+                self.map.entity_list.append(Monster("p", x, y, "Pipsqueak", "Just a friendly small thing", AIObject.pipsqueak_ai))
 
     def carve_map(self):
         for room in self.rooms:
@@ -193,8 +194,8 @@ class Map:
     def is_anyone_at(self, x, y):
         for entity in self.entity_list:
             if entity.x is x and entity.y is y:
-                return True
-        return False
+                return entity
+        return None
 
     def is_something_at(self, x, y):
         return self.is_blocked_at(x, y) and self.is_anyone_at(x, y)
