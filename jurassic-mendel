@@ -2,6 +2,7 @@
 
 # noinspection PyDeprecation
 from states.game import Game
+import sys
 
 if __name__ == "__main__":
-    Game().run_game()
+    Game(len(sys.argv) > 1 and sys.argv[1] == 'DEBUG').run_game()

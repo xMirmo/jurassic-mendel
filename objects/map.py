@@ -239,13 +239,14 @@ class DrawableMap():
         self.currentMap = currentMap
         self.player = player
         self.fov_map = libtcod.map_new(currentMap.width, currentMap.height)
+        self.fov_size = 5
 
         list(map(lambda tile:libtcod.map_set_properties(self.fov_map, tile.x, tile.y, tile.trasparent, not tile.block) , currentMap.get_map_list()))
 
         for tile in self.get_tiles_in_fov(): tile.explored = True
         
     def get_tiles_in_fov(self):
-        libtcod.map_compute_fov(self.fov_map, self.player.x, self.player.y, 5, True, 0)
+        libtcod.map_compute_fov(self.fov_map, self.player.x, self.player.y, self.fov_size, True, 0)
         return list(filter(lambda tile: libtcod.map_is_in_fov(self.fov_map, tile.x, tile.y), self.currentMap.get_map_list()))
 
     def get_map(self):
@@ -261,4 +262,26 @@ class DrawableMap():
         
         for tile in self.get_tiles_in_fov():
             self.currentMap.get_tile(tile.x,tile.y).explored = True
+            libtcod.console_set_char_foreground(0, tile.x, tile.y, libtcod.Color(255, 255, 255))
+
+class DebugDrawableMap():
+    def __init__(self, currentMap, player):
+        self.currentMap = currentMap
+        self.player = player
+        self.fov_map = currentMap
+        for tile in self.currentMap.get_map_list():
+            tile.explored = True;
+
+    def get_tiles_in_fov(self):
+        return self.currentMap.get_map_list()
+
+    def get_map(self):
+        return self.currentMap
+
+    def is_in_fov(self, x, y):
+        return True
+
+    def draw(self):
+        for tile in self.currentMap.get_map_list():
+            tile.draw()
             libtcod.console_set_char_foreground(0, tile.x, tile.y, libtcod.Color(255, 255, 255))

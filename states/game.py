@@ -6,10 +6,11 @@ from objects.map import *
 from states.states import *
 
 class Game():
-    def __init__(self):
+    def __init__(self, is_debug):
         # FIXME this first part should be read from a config file
         SCREEN_WIDTH = 40
         SCREEN_HEIGHT = 40
+        self.debug = is_debug
 
         libtcod.console_set_custom_font('resources/arial10x10.png', libtcod.FONT_TYPE_GREYSCALE | libtcod.FONT_LAYOUT_TCOD)
         libtcod.console_init_root(SCREEN_WIDTH, SCREEN_HEIGHT, 'jurassic-mendel', False)
@@ -27,7 +28,10 @@ class Game():
         self.player = Player('@', starting_position[0], starting_position[1])
         self.current_map.entity_list.append(self.player)
 
-        self.currentDrawMap = DrawableMap(self.current_map, self.player)
+        if(is_debug):
+            self.currentDrawMap = DebugDrawableMap(self.current_map, self.player)
+        else:
+            self.currentDrawMap = DrawableMap(self.current_map, self.player)
 
         self.game_states_map = {
             "Active": ActiveState(),
