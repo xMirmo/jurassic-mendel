@@ -26,6 +26,7 @@ class Game():
 
         starting_position = self.current_map.get_free_space()
         self.player = Player('@', starting_position[0], starting_position[1])
+        self.current_map.entity_list.append(self.player)
 
         self.currentDrawMap = DrawableMap(self.current_map, self.player)
 
@@ -46,22 +47,20 @@ class Game():
             self.game_state.handle_video(self)
             libtcod.console_flush()
 
-            key = libtcod.console_wait_for_keypress(True)
-            self.game_state.handle_input(self, key)
             self.game_state.handle_world(self)
             # handling events
             while self.event_queue:
                 (eventName, eventData) = self.dequeue_event()
-                # FIXME this is perfect for pattern matching
+                # FIXME maybe a dictonary of functions ?
                 if(eventName == "exit_game"):
                     sys.exit()
                 elif(eventName == "player_movement"):
-                    player_new_position = (self.player.x + eventData[0], self.player.y + eventData[1])
+                    player_new_position = (self.player.x + eventData[0][0], self.player.y + eventData[0][1])
                     enemy = self.current_map.is_anyone_at(player_new_position[0], player_new_position[1])
                     if enemy:
                         print(enemy.get_infos())
                     elif self.current_map.is_blocked_at(player_new_position[0], player_new_position[1]):
-                        self.player.move_object(eventData)
+                        self.player.move_object(eventData[0])
                 elif(eventName == "monster_movement"):
                     vector = eventData[0]
                     enemy = eventData[1]
@@ -73,6 +72,7 @@ class Game():
                 elif(eventName == "monster_action"):
                     if(eventData[0] == "pip"):
                         print(str(eventData[1]) + " says: Pip!")
+                #FIXME these should be a static factories        
                 elif(eventName == "go_pause"):
                     self.game_state = PauseState()
                 elif(eventName == "go_active"):
