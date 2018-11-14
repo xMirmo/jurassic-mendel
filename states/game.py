@@ -16,7 +16,6 @@ class Game():
         libtcod.console_set_default_foreground(0, libtcod.white)
 
         self.event_queue = deque()
-        self.game_state = ActiveState()
 
         # FIXME we start with the room, but it could be anything else
 
@@ -29,6 +28,13 @@ class Game():
         self.current_map.entity_list.append(self.player)
 
         self.currentDrawMap = DrawableMap(self.current_map, self.player)
+
+        self.game_states_map = {
+            "Active": ActiveState(),
+            "Pause": PauseState(),
+        }
+
+        self.game_state = self.game_states_map.get("Active")
 
 
 
@@ -74,6 +80,6 @@ class Game():
                         print(str(eventData[1]) + " says: Pip!")
                 #FIXME these should be a static factories        
                 elif(eventName == "go_pause"):
-                    self.game_state = PauseState()
+                    self.game_state = self.game_states_map.get("Pause")
                 elif(eventName == "go_active"):
-                    self.game_state = ActiveState()
+                    self.game_state = self.game_states_map.get("Active")
