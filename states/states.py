@@ -1,5 +1,5 @@
 import libtcodpy as libtcod
-import sys
+from states.event import Event
 
 
 class GameState():
@@ -27,8 +27,8 @@ class ActiveState(GameState):
     def handle_world(self, game):
         for enemy in game.current_map.entity_list:
             action = enemy.act(game)
-            #FIXME Maybe a tuple with 3 elements instead?
-            game.enqueue_event(action[0], (action[1], enemy))
+            event = Event(action[0], action[1], enemy)
+            yield event
 
 
 class PauseState(GameState):
@@ -41,7 +41,8 @@ class PauseState(GameState):
     def handle_world(self, game):
         key = libtcod.console_wait_for_keypress(True)
         if key.vk == libtcod.KEY_ESCAPE:
-            game.enqueue_event("exit_game", None)
-        if key.vk == libtcod.KEY_ENTER:
-            game.enqueue_event("go_active", None)
+            event = Event("exit_game")
+        elif key.vk == libtcod.KEY_ENTER:
+            event = Event("go_active")
 
+        yield event
