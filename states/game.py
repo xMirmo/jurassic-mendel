@@ -11,7 +11,7 @@ class Game():
     def __init__(self, is_debug):
         self.game_screen = GameScreen(40, 50, 40)
         self.debug = is_debug
-        self.logger = self.get_logger()        
+        self.logger = Game.get_logger(self.debug)        
 
         self.event_queue = deque()
 
@@ -42,9 +42,10 @@ class Game():
     def change_game_state(self, newState):
         self.game_state = newState
 
-    def get_logger(self):
+    @staticmethod
+    def get_logger(debug):
             loggerElem = logging.getLogger('game.py')
-            if self.debug:
+            if debug:
                 loggerElem.setLevel(logging.DEBUG)
                 ch = logging.StreamHandler()
                 ch.setLevel(logging.DEBUG)
@@ -89,6 +90,8 @@ class Game():
                 elif(eventName == "monster_action"):
                     if(eventData[0] == "pip"):
                         self.game_screen.message_log.add_line(Message(str(eventData[1]) + " says: Pip!", libtcod.light_green))
+                        self.logger.debug((str(eventData[1]) + " says: Pip!"))
+
                 # FIXME these should be a static factories
                 elif(eventName == "go_pause"):
                     self.game_state = self.game_states_map.get("Pause")
