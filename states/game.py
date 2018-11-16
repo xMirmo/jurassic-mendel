@@ -1,5 +1,6 @@
 from collections import deque
 from objects.objects import Player
+import logging
 
 from interface.gui import GameScreen, Message
 
@@ -10,6 +11,7 @@ class Game():
     def __init__(self, is_debug):
         self.game_screen = GameScreen(40, 50, 40)
         self.debug = is_debug
+        self.logger = Game.get_logger(self.debug)        
 
         self.event_queue = deque()
 
@@ -39,6 +41,24 @@ class Game():
     
     def change_game_state(self, newState):
         self.game_state = newState
+
+    @staticmethod
+    def get_logger(debug):
+            loggerElem = logging.getLogger('game.py')
+            if debug:
+                loggerElem.setLevel(logging.DEBUG)
+                ch = logging.StreamHandler()
+                ch.setLevel(logging.DEBUG)
+            else: 
+                loggerElem.setLevel(logging.INFO)
+                ch = logging.StreamHandler()
+                ch.setLevel(logging.INFO)
+            formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+            ch.setFormatter(formatter)
+            loggerElem.addHandler(ch)
+            logging.basicConfig(filename='jurassic-mendel.log',level=logging.DEBUG)
+            return loggerElem
+
     
     def run_game(self):
         while not libtcod.console_is_window_closed():
@@ -54,6 +74,7 @@ class Game():
                 elif(eventName == "player_movement"):
                     player_new_position = (self.player.x + eventData[0][0], self.player.y + eventData[0][1])
                     enemy = self.current_map.is_anyone_at(player_new_position[0], player_new_position[1])
+                    self.logger.debug(str('Player moved from %d,%d to %d,%d' % (self.player.x,self.player.y,self.player.x + eventData[0][0],self.player.y + eventData[0][1])))
                     if enemy:
                         self.game_screen.message_log.add_line(Message(enemy.get_infos()))
                     elif self.current_map.is_blocked_at(player_new_position[0], player_new_position[1]):
@@ -69,6 +90,8 @@ class Game():
                 elif(eventName == "monster_action"):
                     if(eventData[0] == "pip"):
                         self.game_screen.message_log.add_line(Message(str(eventData[1]) + " says: Pip!", libtcod.light_green))
+                        self.logger.debug((str(eventData[1]) + " says: Pip!"))
+
                 # FIXME these should be a static factories
                 elif(eventName == "go_pause"):
                     self.game_state = self.game_states_map.get("Pause")
