@@ -2,6 +2,8 @@ from .drawable import DrawableObject
 from .movable import MovableObject
 from .descriptionobject import DescriptionObject
 from .aiable import AIObject
+from random import shuffle, randint
+
 
 
 class Entity(DrawableObject, MovableObject, DescriptionObject, AIObject):
@@ -24,3 +26,20 @@ class Monster(Entity):
     def __init__(self, sprite, x, y, name, description, ai):
         Entity.__init__(self, sprite, x, y, name, description, ai)
 
+
+class Item(Entity): 
+    @staticmethod
+    def factory(x, y):
+        random_seed = randint(0, 1);
+        if random_seed == 0:
+           return Sword(x,y)
+        elif random_seed == 1:
+           return Potion(x,y)
+
+class Sword(Item): 
+    def __init__(self,x, y):
+        Entity.__init__(self, "+", x, y, "Sword of Silver Sword", "Pointy!", AIObject.empty_ai)
+
+class Potion(Item): 
+    def __init__(self, x, y):
+        Entity.__init__(self, "8", x, y, "Limoncello", "Hm...", AIObject.empty_ai)    

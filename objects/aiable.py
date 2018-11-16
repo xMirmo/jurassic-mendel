@@ -35,3 +35,7 @@ class AIObject:
         }
 
         return key_map.get(key.vk, ('nop', None))
+    
+    @staticmethod
+    def empty_ai(game):
+        return ("nop",None)

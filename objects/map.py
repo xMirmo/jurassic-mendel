@@ -1,5 +1,8 @@
 from .objects import DrawableObject
 from .objects import Monster
+from .objects import Item
+from .objects import Sword
+from .objects import Potion
 from .objects import AIObject
 import libtcodpy as libtcod
 from random import shuffle, randint
@@ -126,6 +129,7 @@ class MapBuilder:
                 self.corridors.append(self.rooms[i].link_to(self.rooms[next_room]))
 
         self.fill_enemies()
+        self.fill_items()
         self.carve_map()
         return self.map
 
@@ -145,6 +149,16 @@ class MapBuilder:
                     y = randint(room.dimensions.y1, room.dimensions.y2)
                 self.map.entity_list.append(Monster("p", x, y, "Pipsqueak", "A friendly small thing",
                                                     AIObject.pipsqueak_ai))
+    def fill_items(self):
+        for room in self.rooms:
+            enemy_number = (self.depth * 2) + randint(-1, 2)
+            for i in range(enemy_number):
+                x = randint(room.dimensions.x1, room.dimensions.x2)
+                y = randint(room.dimensions.y1, room.dimensions.y2)
+                while self.map.is_something_at(x, y):
+                    x = randint(room.dimensions.x1, room.dimensions.x2)
+                    y = randint(room.dimensions.y1, room.dimensions.y2)
+                self.map.entity_list.append(Item.factory(x,y))                                                   
 
     def carve_map(self):
         for room in self.rooms:
