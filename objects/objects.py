@@ -19,6 +19,7 @@ class Entity(DrawableObject, MovableObject, DescriptionObject, AIObject):
 
 class Player(Entity):
     def __init__(self, sprite, x, y):
+        self.inventory = list()
         Entity.__init__(self, sprite, x, y, "Player", "A player", AIObject.get_input_act)
 
 
@@ -30,7 +31,7 @@ class Monster(Entity):
 class Item(Entity): 
     @staticmethod
     def factory(x, y):
-        random_seed = randint(0, 1);
+        random_seed = randint(0, 1)
         if random_seed == 0:
            return Sword(x,y)
         elif random_seed == 1:

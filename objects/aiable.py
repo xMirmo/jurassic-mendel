@@ -31,6 +31,8 @@ class AIObject:
             libtcod.KEY_DOWN: ("player_movement", (0, 1)),
             libtcod.KEY_LEFT: ("player_movement", (-1, 0)),
             libtcod.KEY_RIGHT: ("player_movement", (1, 0)),
+            libtcod.KEY_TAB: ("show_inventory",None)
+
 
         }
 

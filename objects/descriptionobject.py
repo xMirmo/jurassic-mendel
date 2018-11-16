@@ -6,3 +6,5 @@ class DescriptionObject:
 
     def get_infos(self):
         return self.name + ": " + self.description
+    def get_name(self):
+        return self.name
