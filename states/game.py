@@ -13,12 +13,12 @@ class Game():
         self.debug = is_debug
         self.debug_room = debug_room
         self.logger = Game.get_logger(self.debug)
-
         self.initialize_game_area(is_debug, debug_room)
 
         self.game_states_map = {
             "Active": ActiveState(),
             "Pause": PauseState(),
+            "Game Over": GameOverState(),
         }
 
         self.game_state = self.game_states_map.get("Active")
@@ -30,8 +30,9 @@ class Game():
         else:
             self.current_map = MapBuilder(1).make_map(self.game_screen.game_width, self.game_screen.game_height)
             starting_position = self.current_map.get_free_space()
+
         self.player = Player('@', starting_position[0], starting_position[1])
-        self.current_map.entity_list.append(self.player)
+        self.current_map.entity_list.insert(0, self.player)
         if is_debug:
             self.currentDrawMap = DebugDrawableMap(self.current_map, self.player)
         else:
@@ -57,7 +58,6 @@ class Game():
             logging.basicConfig(filename='jurassic-mendel.log',level=logging.DEBUG)
             return loggerElem
 
-    
     def run_game(self):
         while not libtcod.console_is_window_closed():
             self.game_screen.render_all(self)
